@@ -1,37 +1,33 @@
-import { useState } from "react"
-import axios from "axios";
+import { Button, Card, CardContent, FormControl, Grid, TextField } from "@mui/material";
+import { Container } from "@mui/system";
 
 function Register() {
-    const [data, setData] = useState({
-        'username' : '',
-        'password' : '',
-        'email' : ''
-    })
-    const [errorPassword, setErrorPassword] = useState('')
+
     return (
         <>
-            <h1>Register Dinhi</h1>
-            <p>{ errorPassword }</p>
-            <input placeholder="username" onChange={(event) => {
-                let d = data;
-                setData({...d, username: event.target.value});
-            }} />
-            <input placeholder="email address" onChange={(event) => {
-                let d = data;
-                setData({...d, email: event.target.value});
-            }} />
-            <input placeholder="password" type="password" onChange={(event) => {
-                let d = data;
-                setData({...d, password: event.target.value});
-            }} />
-            <button onClick={() => {
-                axios.post('http://localhost:8000/api/v1/accounts/users/', data).then(response => {
-                    console.log(response.data)
-                }).catch(error => {
-                    const errorMessage = error.response.data;
-                    setErrorPassword(errorMessage.password)
-                })
-            }}>Register</button>
+            <Container maxWidth>
+                <Grid container spacing={2} style={{padding: 20, backgroundColor: '#F0F2F5', height: '100vh'}}>
+                    <Grid item xs={6} md={6}>
+                        <h1>Grid 6</h1>
+                    </Grid>
+                    <Grid item xs={6} md={6}>
+                        <Card>
+                            <CardContent>
+                                <FormControl fullWidth>
+                                    <TextField variant="outlined" placeholder="Email" label="Email" />
+                                    <TextField variant="outlined" placeholder="Password" type="password" label="Password" style={{marginTop: 15, marginBottom: 15}} />
+                                    <Button variant="contained" style={{backgroundColor: '#1877F2'}} size="large">Login</Button>
+                                    <br style={{marginTop: 15}} />
+                                    <Button variant="contained" style={{backgroundColor: '#42B72A'}} size="large">
+                                        Create Account
+                                    </Button>
+                                </FormControl>
+                                
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                </Grid>
+            </Container>
         </>
     )
 }
