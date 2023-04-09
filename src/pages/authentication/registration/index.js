@@ -1,37 +1,57 @@
-import { useState } from "react"
-import axios from "axios";
+import { Button, Card, CardContent, FormControl, Grid, TextField } from "@mui/material";
+import { Container } from "@mui/system";
+import { useState } from "react";
+import axios from "../../../plugins/axios";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
-    const [data, setData] = useState({
-        'username' : '',
-        'password' : '',
-        'email' : ''
+    const [login, setLogin] = useState({
+        'username': '',
+        'password': ''
     })
-    const [errorPassword, setErrorPassword] = useState('')
+    const navigate = useNavigate();
     return (
         <>
-            <h1>Register Dinhi</h1>
-            <p>{ errorPassword }</p>
-            <input placeholder="username" onChange={(event) => {
-                let d = data;
-                setData({...d, username: event.target.value});
-            }} />
-            <input placeholder="email address" onChange={(event) => {
-                let d = data;
-                setData({...d, email: event.target.value});
-            }} />
-            <input placeholder="password" type="password" onChange={(event) => {
-                let d = data;
-                setData({...d, password: event.target.value});
-            }} />
-            <button onClick={() => {
-                axios.post('http://localhost:8000/api/v1/accounts/users/', data).then(response => {
-                    console.log(response.data)
-                }).catch(error => {
-                    const errorMessage = error.response.data;
-                    setErrorPassword(errorMessage.password)
-                })
-            }}>Register</button>
+            <Container>
+                <Grid container spacing={2} style={{padding: 20, backgroundColor: '#F0F2F5', height: '100vh'}}>
+                    <Grid item xs={6} md={6}>
+                        <h1>Grid 6</h1>
+                    </Grid>
+                    <Grid item xs={6} md={6}>
+                        <Card>
+                            <CardContent>
+                                <FormControl fullWidth>
+                                    <TextField variant="outlined" placeholder="Email" label="Email" value={login.username} onChange={(event) => {
+                                        setLogin({
+                                            ...login,
+                                            username: event.target.value
+                                        })
+                                    }}/>
+                                    <TextField variant="outlined" placeholder="Password" type="password" value={login.password} label="Password" style={{marginTop: 15, marginBottom: 15}} onChange={(event) => {
+                                        setLogin({
+                                            ...login,
+                                            password: event.target.value
+                                        })
+                                    }}/>
+                                    <Button variant="contained" style={{backgroundColor: '#1877F2'}} size="large" onClick={() => {
+                                        axios.post('accounts/token/login', login).then(response => {
+                                            localStorage.setItem('token', response.data.auth_token);
+                                            navigate("/application")
+                                        })
+                                    }}>Login</Button>
+                                    <br style={{marginTop: 15}} />
+                                    <Button variant="contained" style={{backgroundColor: '#42B72A'}} size="large" onClick={() => {
+                                        navigate("/registration")
+                                    }}>
+                                        Create Account
+                                    </Button>
+                                </FormControl>
+                                
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                </Grid>
+            </Container>
         </>
     )
 }
